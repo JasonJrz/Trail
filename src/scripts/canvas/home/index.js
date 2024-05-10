@@ -57,12 +57,8 @@ export default class Home {
 
     this.scene.add(this.plane)
 
-    //Raycaster
-    this.raycaster = new THREE.Raycaster()
-
-    this.sMouse = new THREE.Vector2(9999, 9999)
-    this.cMouse = new THREE.Vector2(9999, 9999)
-    this.cMousePrev = new THREE.Vector2(9999, 9999)
+    this.mouse = new THREE.Vector2(9999, 9999)
+    this.mousePrev = new THREE.Vector2(9999, 9999)
 
     this.dispTexture = new THREE.CanvasTexture(this.canvas)
   }
@@ -101,7 +97,10 @@ export default class Home {
     const x = (event.clientX / win.w) * 2 - 1
     const y = -(event.clientY / win.h) * 2 + 1
 
-    this.sMouse.set(x, y)
+    const cx = (x + 1) / 2 * this.canvas.width
+    const cy = (1 - y) / 2 * this.canvas.height
+
+    this.mouse.set(cx, cy)
   }
 
   onResize(sizes) {
@@ -109,28 +108,19 @@ export default class Home {
 
     this.mesh.scale.set(this.sizes.width, this.sizes.height)
     this.plane.scale.set(this.sizes.width, this.sizes.height)
+
     this.program.uniforms.uResolution.value = [this.sizes.width, this.sizes.height]
   }
 
   update() {
-    //Raycaster
-    this.raycaster.setFromCamera(this.sMouse, this.camera)
-    const intersections = this.raycaster.intersectObject(this.plane)
- 
-    if(intersections.length) {
-      const uv = intersections[0].uv
-
-      this.cMouse.x = uv.x * this.canvas.width
-      this.cMouse.y = (1 - uv.y) * this.canvas.height
-    }
-
     this.context.globalCompositeOperation = 'source-over'
     this.context.globalAlpha = 0.02
     this.context.fillRect(0, 0, this.canvas.width, this.canvas.height)
 
     //Mouse Speed
-    const mouseDistance = this.cMousePrev.distanceTo(this.cMouse)
-    this.cMousePrev.copy(this.cMouse)
+    const mouseDistance = this.mousePrev.distanceTo(this.mouse)
+    console.log(mouseDistance)
+    this.mousePrev.copy(this.mouse)
     const alpha = Math.min(mouseDistance * 0.1, 1)
 
     //Draw Glow
@@ -140,11 +130,11 @@ export default class Home {
     this.context.globalAlpha = alpha
 
     this.context.drawImage(
-        this.glowImage, 
-        this.cMouse.x - glowSize * 0.5,
-        this.cMouse.y - glowSize * 0.5,
-        glowSize,
-        glowSize
+      this.glowImage, 
+      this.mouse.x - glowSize * 0.5,
+      this.mouse.y - glowSize * 0.5,
+      glowSize,
+      glowSize
     )
 
     //Texture
