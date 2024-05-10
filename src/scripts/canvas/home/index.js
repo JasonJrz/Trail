@@ -1,8 +1,6 @@
 
 import * as THREE from 'three'
 
-import FX from '../../modules/fx'
-
 import { listen } from '../../utils/listener'
 import { win } from '../../utils/win'
 

@@ -86,7 +86,7 @@ export default class Gl {
     if(this.home) this.home.onResize(this.sizes)
   }
 
-  update(scroll, progress) {
+  update(scroll) {
     if(this.home) this.home.update(scroll)
 
     this.controls.update()
