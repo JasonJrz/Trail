@@ -30,11 +30,11 @@ export default class Home {
   
   create2DCanvas() {
     this.canvas = document.createElement('canvas')
-    this.canvas.height = innerHeight / 10
-    this.canvas.width = innerWidth / 10
+    this.canvas.height = innerHeight * 0.5
+    this.canvas.width = innerWidth * 0.5
     this.canvas.style.position = 'fixed'
-    this.canvas.style.height = `${innerHeight / 4}px`
-    this.canvas.style.width = `${innerWidth / 4}px`
+    this.canvas.style.height = `${innerHeight * 0.2}px`
+    this.canvas.style.width = `${innerWidth * 0.2}px`
     this.canvas.style.top = 0
     this.canvas.style.left = 0
     this.canvas.style.zIndex = 10
@@ -106,6 +106,9 @@ export default class Home {
   onResize(sizes) {
     this.sizes = sizes
 
+    this.canvas.style.height = `${innerHeight * 0.2}px`
+    this.canvas.style.width = `${innerWidth * 0.2}px`
+
     this.mesh.scale.set(this.sizes.width, this.sizes.height)
     this.plane.scale.set(this.sizes.width, this.sizes.height)
 
@@ -119,7 +122,6 @@ export default class Home {
 
     //Mouse Speed
     const mouseDistance = this.mousePrev.distanceTo(this.mouse)
-    console.log(mouseDistance)
     this.mousePrev.copy(this.mouse)
     const alpha = Math.min(mouseDistance * 0.1, 1)
 
